@@ -7,7 +7,7 @@
             <input type="text" name="username" placeholder="Enter username" required><br />
             <input type="password" name="password" placeholder="Enter password" required><br />
             <input type="email" name="email" placeholder="Enterr email" required><br />
-            <button type="submit">회원가입</button>
+            <button type="submit">회원가입완료</button>
         </form>
         <%@ include file="../layout/footer.jsp" %>
         

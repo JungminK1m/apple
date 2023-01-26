@@ -13,7 +13,8 @@ public interface UserRepository {
 
     public List<User> findAll();
 
-    public int updateById(@Param("id") int id, @Param("password") String password);
+    public int updateById(@Param("username") String username, @Param("password") String password,
+            @Param("email") String email);
 
-    public int findByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
+    public User findByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
 }

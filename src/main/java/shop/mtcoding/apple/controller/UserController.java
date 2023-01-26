@@ -1,10 +1,14 @@
 package shop.mtcoding.apple.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import shop.mtcoding.apple.model.User;
 import shop.mtcoding.apple.model.UserRepository;
 
 @Controller
@@ -12,6 +16,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private HttpSession session;
 
     @GetMapping("/joinForm")
     public String joinForm() {
@@ -35,16 +42,34 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String username, String password) {
-        int result = userRepository.findByUsernameAndPassword(username, password);
-        if (result == 1) {
-            return "board/list";
-        } else {
+        User user = userRepository.findByUsernameAndPassword(username, password);
+        if (user == null) {
             return "redirect:/loginform";
+        } else {
+            session.setAttribute("principal", user);
+            return "redirect:/list";
         }
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "user/test";
+    @GetMapping("/logout")
+    public String logout() {
+        session.invalidate();
+        return "redirect:/";
     }
+
+    @GetMapping("/updateForm")
+    public String updateForm() {
+        return "user/updateForm";
+    }
+
+    @PostMapping("/update")
+    public String updateById(@PathVariable String username, String password, String email) {
+        int result = userRepository.updateById(username, password, email);
+        if (result == 1) {
+            return "redirect:/list";
+        } else {
+            return " redirect:/updateForm";
+        }
+    }
+
 }
