@@ -5,7 +5,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import shop.mtcoding.apple.model.User;
@@ -15,10 +14,10 @@ import shop.mtcoding.apple.model.UserRepository;
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
 
     @Autowired
-    private HttpSession session;
+    HttpSession session;
 
     @GetMapping("/joinForm")
     public String joinForm() {
@@ -63,10 +62,11 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    public String updateById(@PathVariable String username, String password, String email) {
-        int result = userRepository.updateById(username, password, email);
+    public String updateById(String username, String password, String email) {
+        User user = (User) session.getAttribute("principal");
+        int result = userRepository.updateById(user.getId(), username, password, email);
         if (result == 1) {
-            return "redirect:/list";
+            return "redirect:/loginForm";
         } else {
             return " redirect:/updateForm";
         }
